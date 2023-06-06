@@ -1,13 +1,13 @@
 import * as itemService from '../services/itemService';
 import express from 'express'
 
-const Item = require("../Models/Item");
+const Items = require("../Models/Item");
 const router = express.Router();
 module.exports = router;
 
 //AÑADIR ITEM
 router.post('/item', async (req, res) => {
-    const item = new Item({
+    const item = new Items({
         denominacion: req.body.denominacion,
         ubicacion: req.body.ubicacion,
         conjuntoEquipo: req.body.conjuntoEquipo,
@@ -27,7 +27,7 @@ router.post('/item', async (req, res) => {
 //OBTENER ITEM POR ID
 router.get('/item/:id', async(req, res) => {
     try{
-        const data = await Item.findById(req.params.id);
+        const data = await Items.findById(req.params.id);
         if (data == null){
             res.send(`El elemento con id ${req.params.id} no existe`)
         }else{
@@ -41,7 +41,7 @@ router.get('/item/:id', async(req, res) => {
 //OBTENER TODOS LOS ITEMS
 router.get('/item', async (_req, res) => {
     try {
-        const data = await Item.find();
+        const data = await Items.find();
         res.status(200).json(data)
     } catch (error: any) {
         res.status(500).json({ message: error.message })
@@ -55,7 +55,7 @@ router.put('/item/:id', async(req, res) => {
         const updatedData = req.body;
         const options = { new: true };
 
-        const result = await Item.findByIdAndUpdate(
+        const result = await Items.findByIdAndUpdate(
             id, updatedData, options
         )
 
@@ -70,7 +70,7 @@ router.put('/item/:id', async(req, res) => {
 router.delete('/item/:id', async(req, res) => {
     try {
         const id = req.params.id;
-        const data = await Item.findByIdAndDelete(id)
+        const data = await Items.findByIdAndDelete(id)
         res.send(`El  elemento ${data._id} ha sido eliminado`)
     }
     catch (error:any) {

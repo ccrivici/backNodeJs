@@ -9,7 +9,7 @@ const itemSchema = new mongoose.Schema({
     marcaModelo:String,
     periocidad:String,
     categoria:String,
-}, { versionKey: false });
+}, { versionKey: false, collection: 'Items' });
 
-module.exports= mongoose.model('items',itemSchema);
+module.exports= mongoose.model('Items',itemSchema);
 
