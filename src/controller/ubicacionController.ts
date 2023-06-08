@@ -1,4 +1,6 @@
 import express from 'express'
+import { PaginationEntity } from '../Models/PaginationEntity';
+import { Pagination } from '../types';
 
 const Ubicacion = require("../Models/Ubicacion");
 const router = express.Router();
@@ -49,6 +51,8 @@ router.put('/ubicacion/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const updatedData = req.body;
+        
+        //devuelve el documento actualizado en la respuesta
         const options = { new: true };
 
         const result = await Ubicacion.findByIdAndUpdate(
@@ -75,6 +79,29 @@ router.delete('/ubicacion/:id', async (req, res) => {
 })
 
 //PAGINACION 
-router.post('/pagination`', async (req, res) => {
-    res.send('Post API')
+router.post('/ubicacion/pagination', async (req, res) => {
+    if (!req.body.filterValue ){
+        var pagination:Pagination = {
+            PageSize: req.body.pageSize,
+            Page: req.body.page,
+            Sort: req.body.sort,
+            SortDirection: req.body.sortDirection,
+            Filter: ''
+        }
+    }else{
+        var pagination:Pagination = {
+            PageSize: req.body.pageSize,
+            Page:req.body.page,
+            Sort:req.body.sort,
+            SortDirection:req.body.sortDirection,
+            Filter:req.body.filter,
+            FilterValue:{
+                Propiedad:req.body.filterValue.propiedad,
+                Valor:req.body.filterValue.valor
+            }        
+        }
+    }
+   
+    var resultados = await PaginationEntity.paginationByFilter(pagination,"Ubicaciones")
+    res.send(resultados);
 })

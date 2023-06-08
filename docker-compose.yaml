@@ -1,0 +1,20 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb7
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+  mongodb7:
+    build:
+      context: .
+      dockerfile: Dockerfile-mongo
+    volumes:
+      - /var/lib/docker/volumes/docker/_data:/data/db
+    ports:
+      - "27017:27017"

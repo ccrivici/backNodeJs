@@ -28,8 +28,18 @@ export interface Mantenimiento {
     item_id: string;
     ubicacion_id: string;
 }
-
 export interface FilterValueClass{
     Propiedad:string,
     Valor:string
+}
+export interface Pagination{
+    PageSize: number
+    Page: number
+    Sort: string
+    SortDirection: string
+    Filter?: string
+    FilterValue?: FilterValueClass
+    Pagesquantity?: number
+    Data?: Array<Item>
+    TotalRows?: number
 }

@@ -1,4 +1,6 @@
 import express from 'express'
+import { PaginationEntity } from '../Models/PaginationEntity';
+import { Pagination } from '../types';
 
 const Mantenimiento = require("../Models/Mantenimiento");
 const router = express.Router();
@@ -53,6 +55,8 @@ router.put('/mantenimiento/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const updatedData = req.body;
+        
+        //devuelve el documento actualizado en la respuesta
         const options = { new: true };
 
         const result = await Mantenimiento.findByIdAndUpdate(
@@ -79,6 +83,29 @@ router.delete('/mantenimiento/:id', async (req, res) => {
 })
 
 //PAGINACION 
-router.post('/pagination`', async (req, res) => {
-    res.send('Post API')
+router.post('/mantenimiento/pagination', async (req, res) => {
+    if (!req.body.filterValue ){
+        var pagination:Pagination = {
+            PageSize: req.body.pageSize,
+            Page: req.body.page,
+            Sort: req.body.sort,
+            SortDirection: req.body.sortDirection,
+            Filter: ''
+        }
+    }else{
+        var pagination:Pagination = {
+            PageSize: req.body.pageSize,
+            Page:req.body.page,
+            Sort:req.body.sort,
+            SortDirection:req.body.sortDirection,
+            Filter:req.body.filter,
+            FilterValue:{
+                Propiedad:req.body.filterValue.propiedad,
+                Valor:req.body.filterValue.valor
+            }        
+        }
+    }
+   
+    var resultados = await PaginationEntity.paginationByFilter(pagination,"Mantenimientos")
+    res.send(resultados);
 })
